@@ -6,6 +6,7 @@ from pics import cheesePhoto
 
 intents = discord.Intents(
     message_content = True
+    messages = True
 )
 
 # This shit is neccessary but doesn't do shit too

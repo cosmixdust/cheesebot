@@ -40,7 +40,7 @@ async def cheesePics(interaction: discord.Interaction):
 async def on_message(message):
     if 'cheese' in message.content.lower():
         try:
-            await message.add_reaction(':cheese:')
+            await message.add_reaction('🧀')
         except Exception as e:
             print(e)
 

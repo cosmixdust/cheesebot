@@ -4,7 +4,9 @@ from discord.ext import commands
 from facts import cheeseFacts
 from pics import cheesePhoto
 
-intents = discord.Intents()
+intents = discord.Intents(
+    message_content = True
+)
 
 # This shit is neccessary but doesn't do shit too
 bot = commands.Bot(command_prefix= '*', intents=intents)
@@ -34,9 +36,12 @@ async def cheesePics(interaction: discord.Interaction):
     await interaction.response.send_message(cheesePhoto[0])
 
 @bot.event
-async def reaction(message: discord.Message):
-    if 'cheese' in message:
-        await message.add_reaction(':cheese:')
+async def on_message(message):
+    if 'cheese' in message.content.lower():
+        try:
+            await message.add_reaction(':cheese:')
+        except Exception as e:
+            print(e)
 
 fileToken = open("token.txt", "r")
 token = fileToken.read()

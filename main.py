@@ -5,7 +5,7 @@ from facts import cheeseFacts
 from pics import cheesePhoto
 
 intents = discord.Intents(
-    message_content = True
+    message_content = True,
     messages = True
 )
 

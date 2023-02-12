@@ -34,7 +34,7 @@ async def cheesePics(interaction: discord.Interaction):
     await interaction.response.send_message(cheesePhoto[0])
 
 @bot.event
-async def on_message(message):
+async def reaction(message: discord.Message):
     if 'cheese' in message:
         await message.add_reaction(':cheese:')
 

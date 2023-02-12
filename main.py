@@ -35,7 +35,7 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.event
 async def on_message(message):
-    if message == 'cheese':
+    if 'cheese' in message:
         await message.add_reaction(':cheese:')
 
 fileToken = open("token.txt", "r")

@@ -33,6 +33,10 @@ async def cheesePics(interaction: discord.Interaction):
     random.shuffle(cheesePhoto)
     await interaction.response.send_message(cheesePhoto[0])
 
+@bot.event
+async def on_message(message):
+    if message == 'cheese':
+        await message.add_reaction(':cheese:')
 
 fileToken = open("token.txt", "r")
 token = fileToken.read()

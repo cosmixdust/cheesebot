@@ -34,4 +34,5 @@ wordsList = [
     'chisi',
     'chizi',
     'farmaajo',
+    'queso'
 ]

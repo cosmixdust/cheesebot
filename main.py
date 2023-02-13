@@ -39,7 +39,7 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.event
 async def on_message(message):
-    if wordsList[any] in message.content.lower():
+    if any(word in message.content.lower() for word in wordsList):
         try:
             await message.add_reaction('🧀')
         except Exception as e:

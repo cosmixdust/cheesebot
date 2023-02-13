@@ -1,4 +1,4 @@
-words = [
+wordsList = [
     'kaas',
     'djathë',
     'pendir',

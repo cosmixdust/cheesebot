@@ -3,7 +3,7 @@ import random
 from discord.ext import commands
 from facts import cheeseFacts
 from pics import cheesePhoto
-from words import words
+from words import wordsList
 
 intents = discord.Intents(
     message_content = True,
@@ -39,7 +39,7 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.event
 async def on_message(message):
-    if words in message.content.lower():
+    if message.content.lower() in wordsList:
         try:
             await message.add_reaction('🧀')
         except Exception as e:

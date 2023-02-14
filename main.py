@@ -43,8 +43,8 @@ async def cheesePics(interaction: discord.Interaction):
 async def on_message(message):
     # trigger message stuff
     trigger = message.content
-    trigger = trigger.translate(str.maketrans('', '', string.punctuation)).replace('\n', '')
-    if any(word in trigger.lower().replace(' ', '') for word in wordsList):
+    trigger = trigger.translate(str.maketrans('', '', string.punctuation)).replace('\n', '').replace(' ', '').lower()
+    if any(word in trigger for word in wordsList):
         try:
             await message.add_reaction('🧀')
         except Exception as e:

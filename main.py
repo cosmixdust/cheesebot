@@ -40,6 +40,7 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.event
 async def on_message(message):
+    # trigger message stuff
     trigger = message.content
     trigger = trigger.translate(str.maketrans('', '', string.punctuation)).replace('\n', '')
     if any(word in trigger.lower().replace(' ', '') for word in wordsList):

@@ -16,6 +16,7 @@ bot = commands.Bot(command_prefix= '*', intents=intents)
 
 @bot.event
 async def on_ready():
+    # on ready stuff
     print('GIVE ME THE CHEESE.')
     await bot.change_presence(activity=discord.Game('cheese.'))
     try:

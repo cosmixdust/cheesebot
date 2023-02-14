@@ -1,5 +1,6 @@
 import discord
 import random
+import string
 from discord.ext import commands
 from facts import cheeseFacts
 from pics import cheesePhoto
@@ -39,7 +40,9 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.event
 async def on_message(message):
-    if any(word in message.content.lower().replace(' ', '') for word in wordsList):
+    trigger = message.content
+    trigger = trigger.translate(str.maketrans('', '', string.punctuation))
+    if any(word in trigger.lower().replace(' ', '') for word in wordsList):
         try:
             await message.add_reaction('🧀')
         except Exception as e:

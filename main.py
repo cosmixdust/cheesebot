@@ -22,7 +22,6 @@ async def on_ready():
     # on ready stuff
     print('GIVE ME THE CHEESE.')
     await bot.change_presence(activity=discord.Game('cheese.'))
-    bot.loop.create_task(asyncio.gather(cheeseday(), asyncio.sleep(86_400)))
     try:
         synced = await bot.tree.sync()
         print(f"Synced {len(synced)} command(s)")

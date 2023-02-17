@@ -1,6 +1,9 @@
 import discord
+import datetime
+import asyncio
 import random
 import string
+import aiosqlite
 from discord.ext import commands
 from facts import cheeseFacts
 from pics import cheesePhoto
@@ -19,6 +22,7 @@ async def on_ready():
     # on ready stuff
     print('GIVE ME THE CHEESE.')
     await bot.change_presence(activity=discord.Game('cheese.'))
+    bot.loop.create_task(asyncio.gather(cheeseday(), asyncio.sleep(86_400)))
     try:
         synced = await bot.tree.sync()
         print(f"Synced {len(synced)} command(s)")
@@ -39,6 +43,10 @@ async def cheesePics(interaction: discord.Interaction):
     random.shuffle(cheesePhoto)
     await interaction.response.send_message(cheesePhoto[0])
 
+@bot.tree.command(name='announcements', description='set a channel for announcements')
+async def announcements(interaction: discord.Interaction):
+
+
 @bot.event
 async def on_message(message):
     # trigger message stuff
@@ -49,6 +57,14 @@ async def on_message(message):
             await message.add_reaction('🧀')
         except Exception as e:
             print(e)
+
+@bot.event
+async def cheeseday():
+    time = datetime.date.today()
+    if time.month == 6 and time.day == 4:
+        channel = bot.get_channel(id)
+        message = 'It is **National Cheese Day**! Happy Cheese Day to me!'
+        await channel.send(message)
 
 fileToken = open("token.txt", "r")
 token = fileToken.read()

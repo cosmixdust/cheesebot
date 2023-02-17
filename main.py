@@ -44,7 +44,7 @@ async def cheesePics(interaction: discord.Interaction):
 
 @bot.tree.command(name='announcements', description='set a channel for announcements')
 async def announcements(interaction: discord.Interaction):
-    pass
+    await interaction.response.send_message('this does nothing for now.')
 
 
 @bot.event

@@ -36,7 +36,6 @@ wordsList = [
     'farmaajo',
     'queso',
     'チーズ',
-    'ost',
     'abbaye de belloc',
     'abbaye de belval',
     'abbaye de citreaux',

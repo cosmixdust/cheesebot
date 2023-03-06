@@ -1,9 +1,9 @@
 import discord
-import datetime
-import asyncio
+#import datetime
+# import asyncio
 import random
 import string
-import aiosqlite
+# import aiosqlite
 from discord.ext import commands
 from facts import cheeseFacts
 from pics import cheesePhoto
@@ -54,17 +54,23 @@ async def on_message(message):
     trigger = trigger.translate(str.maketrans('', '', string.punctuation)).replace('\n', '').replace(' ', '').lower()
     if any(word in trigger for word in wordsList):
         try:
-            await message.add_reaction('🧀')
+            for word in wordsList:
+                if word in trigger:
+                    await message.add_reaction('🧀')
+                    try:
+                        await message.author.send('You said {}'.format(word))
+                    except:
+                        pass
         except Exception as e:
             print(e)
 
-@bot.event
-async def cheeseday():
-    time = datetime.date.today()
-    if time.month == 6 and time.day == 4:
-        channel = bot.get_channel(id)
-        message = 'It is **National Cheese Day**! Happy Cheese Day to me!'
-        await channel.send(message)
+#@bot.event
+#async def cheeseday():
+#    time = datetime.date.today()
+#    if time.month == 6 and time.day == 4:
+#        channel = bot.get_channel(id)
+#        message = 'It is **National Cheese Day**! Happy Cheese Day to me!'
+#        await channel.send(message)
 
 fileToken = open("token.txt", "r")
 token = fileToken.read()

@@ -50,20 +50,26 @@ async def announcements(interaction: discord.Interaction):
 @bot.event
 async def on_message(message):
     # trigger message stuff
+    trigger_words = []
     trigger = message.content
     trigger = trigger.translate(str.maketrans('', '', string.punctuation)).replace('\n', '').replace(' ', '').lower()
     if any(word in trigger for word in wordsList):
         try:
             for word in wordsList:
                 if word in trigger:
-                    await message.add_reaction('🧀')
-                    try:
-                        await message.author.send('You said {}'.format(word))
-                    except:
+                    trigger_words.append(word)
+            if trigger_words:
+                try:
+                    if message.author.bot:
                         pass
+                    else:
+                        await message.add_reaction('🧀')
+                        await message.author.send('You said {}'.format(trigger_words))
+                except:
+                    pass
         except Exception as e:
             print(e)
-
+    
 #@bot.event
 #async def cheeseday():
 #    time = datetime.date.today()

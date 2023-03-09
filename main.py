@@ -64,7 +64,7 @@ async def on_message(message):
                         pass
                     else:
                         await message.add_reaction('🧀')
-                        await message.author.send(f"**{'**, **'.join(trigger_words)}**")
+                        await message.author.send(f"You said: **{'**, **'.join(trigger_words)}**")
                 except:
                     pass
         except Exception as e:

@@ -44,7 +44,6 @@ async def timeCheck():
                     print(e)
             await asyncio.sleep(60)
 
-
 @bot.event
 async def on_ready():
     # on ready stuff

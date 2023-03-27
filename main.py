@@ -49,9 +49,10 @@ async def on_ready():
     # on ready stuff
     print('GIVE ME THE CHEESE.')
     await bot.change_presence(activity=discord.Game('cheese.'))
-    # Connect to the database and create the 'ids' table if it doesn't exist
+    # Connect to the database and create tables if they don't exist
     async with aiosqlite.connect('main.db') as db:
         await db.execute('CREATE TABLE IF NOT EXISTS ids (id INTEGER, guild INTEGER)')
+        await db.execute('CREATE TABLE IF NOT EXISTS blacklist (user_id INTEGER)')
         await db.commit()
     # Start the timeCheck task
     timeCheck.start()
@@ -76,6 +77,18 @@ async def cheesePics(interaction: discord.Interaction):
     random.shuffle(cheesePhoto)
     await interaction.response.send_message(cheesePhoto[0])
 
+@bot.tree.command(name='blacklist', description='blacklist yourself from the trigger DMs')
+async def blackList(interaction: discord.Interaction):
+    async with aiosqlite.connect('main.db') as db:
+        cursor = await db.execute('SELECT user_id FROM blacklist WHERE user_id = ?', (interaction.user.id))
+        data = await cursor.fetchone()
+         if data:
+            await db.execute('UPDATE blacklist SET user_id = ?, (interaction.user.id))
+        else:
+            await db.execute('INSERT INTO blacklist (user_id) VALUES (?)', (interaction.user.id))
+        await db.commit()
+    await interaction.response.send_message('You\'re now in the blacklist, you will no longer recieve DMs!')
+    
 
 @bot.tree.command(name='announcements', description='Set a channel for announcements (admins only).')
 @app_commands.describe(channel='The channel for the announcements.')
@@ -124,6 +137,10 @@ async def on_message(message):
             return
         if message.author.bot:
             return
+        async with aiosqlite.connect('main.db') as db:
+            async with db.execute('SELECT user_id FROM blacklist') as cursor:
+                async for row in cursor:
+                    await message.add_reaction('🧀')
         await message.add_reaction('🧀')
         await message.author.send(f"You said: **{'**, **'.join(trigger_words)}**")
     except Exception as e:

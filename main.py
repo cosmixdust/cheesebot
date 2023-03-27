@@ -20,6 +20,27 @@ intents = discord.Intents(
 # This shit is neccessary but doesn't do shit too
 bot = commands.Bot(command_prefix='*', intents=intents)
 
+def make_help_embed(author: discord.User) -> discord.Embed:
+    embed = discord.Embed(
+        title='About cheeseBot...',
+        description='Here\'s everything you need to know!',
+        color=discord.Color.random(),
+        timestamp=datetime.now()
+    )
+    embed.add_field(
+        name='Who am I?',
+        value='I\'m cheeseBot. A bot made by <@!396376536070094848> related to cheese stuff.',
+    )
+    embed.add_field(
+        name='Commands?',
+        value='/cheese, /fact, /pic, /blacklist, /announcements, /unsubscribe'
+    )
+    embed.set_author(
+        name=author.name,
+        icon_url=author.avatar,
+    )
+    return embed
+
 
 @tasks.loop(seconds=1)
 async def timeCheck():
@@ -60,6 +81,9 @@ async def on_ready():
     synced = await bot.tree.sync()
     print(f"Synced {len(synced)} command(s)")
 
+@bot.tree.command(name='help', description='use this to know more')
+async def helpCommand(interaction: discord.Interaction):
+    await interaction.response.send_message(embed=make_help_embed(interaction.user))
 
 @bot.tree.command(name='cheese', description='cheese')
 async def cheeseCommand(interaction: discord.Interaction):
@@ -77,17 +101,19 @@ async def cheesePics(interaction: discord.Interaction):
     random.shuffle(cheesePhoto)
     await interaction.response.send_message(cheesePhoto[0])
 
-@bot.tree.command(name='blacklist', description='blacklist yourself from the trigger DMs')
+@bot.tree.command(name='blacklist', description='blacklist yourself from the trigger DMs (using the command again will whitelist you.)')
 async def blackList(interaction: discord.Interaction):
     async with aiosqlite.connect('main.db') as db:
-        cursor = await db.execute('SELECT user_id FROM blacklist WHERE user_id = ?', (interaction.user.id))
+        cursor = await db.execute('SELECT user_id FROM blacklist WHERE user_id = ?', (int(interaction.user.id),))
         data = await cursor.fetchone()
-         if data:
-            await db.execute('UPDATE blacklist SET user_id = ?, (interaction.user.id))
+        if data:
+            await db.execute('DELETE FROM blacklist WHERE user_id = ?', (int(interaction.user.id),))
+            message = 'You have been removed from the blacklist. You will now receive DMs.'
         else:
-            await db.execute('INSERT INTO blacklist (user_id) VALUES (?)', (interaction.user.id))
+            await db.execute('INSERT INTO blacklist (user_id) VALUES (?)', (int(interaction.user.id),))
+            message = 'You have been added to the blacklist. You will no longer receive DMs.'
         await db.commit()
-    await interaction.response.send_message('You\'re now in the blacklist, you will no longer recieve DMs!')
+    await interaction.response.send_message(message)
     
 
 @bot.tree.command(name='announcements', description='Set a channel for announcements (admins only).')
@@ -140,9 +166,23 @@ async def on_message(message):
         async with aiosqlite.connect('main.db') as db:
             async with db.execute('SELECT user_id FROM blacklist') as cursor:
                 async for row in cursor:
-                    await message.add_reaction('🧀')
+                    if row[0] == message.author.id:
+                        await message.add_reaction('🧀')
+                        return
         await message.add_reaction('🧀')
-        await message.author.send(f"You said: **{'**, **'.join(trigger_words)}**")
+        trigger_words_str = '**, **'.join(trigger_words)
+        embed = discord.Embed(
+            title='Triggered Words Detected',
+            description=f"You said: **{trigger_words_str}**",
+            color=discord.Color.random(),
+            timestamp=datetime.now()
+        )
+        embed.set_author(
+            name=message.author.name,
+            icon_url=message.author.avatar,
+        )
+        embed.set_footer(text="Use /blacklist to not receive DMs anymore")
+        await message.author.send(embed=embed)
     except Exception as e:
         print(e)
 

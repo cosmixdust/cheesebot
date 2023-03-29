@@ -36,6 +36,10 @@ def make_help_embed(author: discord.User) -> discord.Embed:
         name='Commands?',
         value='/cheese, /fact, /pic, /blacklist, /announcements, /unsubscribe'
     )
+    embed.add_field(
+        name='What\'s your privacy policy?',
+        value='You can check our privacy policy [here](https://github.com/deltastro/cheesebot/blob/master/policy.md)'
+    )
     embed.set_author(
         name=author.name,
         icon_url=author.avatar,

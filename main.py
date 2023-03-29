@@ -116,10 +116,10 @@ async def blackList(interaction: discord.Interaction):
     await interaction.response.send_message(message)
     
 
-@bot.tree.command(name='announcements', description='sub/unsub a channel for announcements! (admins only).')
-@app_commands.describe(channel='the channel for the announcements.')
+@bot.tree.command(name='announcements', description='Set a channel for announcements (admins only).')
+@app_commands.describe(channel='The channel for the announcements.')
 @app_commands.checks.has_permissions(administrator=True)
-async def manage_announcements(interaction: discord.Interaction, channel: discord.TextChannel):
+async def manage_announcements(interaction: discord.Interaction, channel: typing.Optional[discord.TextChannel] = None):
     async with aiosqlite.connect('main.db') as db:
         cursor = await db.execute('SELECT id FROM ids WHERE guild = ?', (interaction.guild.id,))
         data = await cursor.fetchone()
@@ -140,6 +140,7 @@ async def manage_announcements(interaction: discord.Interaction, channel: discor
                 await db.execute('INSERT INTO ids (id, guild) VALUES (?, ?)', (channel.id, interaction.guild.id))
             await interaction.response.send_message(f'Congrats! Your channel set for cheese announcements is now {channel.mention}')
         await db.commit()
+
 
 
 @bot.event

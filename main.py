@@ -34,7 +34,7 @@ def make_help_embed(author: discord.User) -> discord.Embed:
     )
     embed.add_field(
         name='Commands?',
-        value='/cheese, /fact, /pic, /blacklist, /announcements, /unsubscribe'
+        value='/cheese, /fact, /pic, /blacklist, /announcements'
     )
     embed.add_field(
         name='What\'s your privacy policy?',

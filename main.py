@@ -116,36 +116,31 @@ async def blackList(interaction: discord.Interaction):
     await interaction.response.send_message(message)
     
 
-@bot.tree.command(name='announcements', description='Set a channel for announcements (admins only).')
-@app_commands.describe(channel='The channel for the announcements.')
+@bot.tree.command(name='announcements', description='sub/unsub a channel for announcements! (admins only).')
+@app_commands.describe(channel='the channel for the announcements.')
 @app_commands.checks.has_permissions(administrator=True)
-async def announcements(interaction: discord.Interaction, channel: discord.TextChannel):
-    # Check channel is in the same guild
-    if channel.guild != interaction.guild:
-        return await interaction.response.send_message('That\'s not a channel on this server!', ephemeral=True)
+async def manage_announcements(interaction: discord.Interaction, channel: discord.TextChannel):
     async with aiosqlite.connect('main.db') as db:
         cursor = await db.execute('SELECT id FROM ids WHERE guild = ?', (interaction.guild.id,))
         data = await cursor.fetchone()
-        if data:
-            await db.execute('UPDATE ids SET id = ? WHERE guild = ?', (channel.id, interaction.guild.id))
+        if not channel:
+            # Unsubscribe from announcements
+            if data:
+                await cursor.execute('DELETE FROM ids WHERE guild = ?', (interaction.guild.id,))
+                await interaction.response.send_message('Got it! You will no longer receive cheese announcements!')
+            else:
+                await interaction.response.send_message('You\'re not subscribed to cheese announcements!', ephemeral=True)
         else:
-            await db.execute('INSERT INTO ids (id, guild) VALUES (?, ?)', (channel.id, interaction.guild.id))
+            # Subscribe to announcements
+            if channel.guild != interaction.guild:
+                return await interaction.response.send_message('That\'s not a channel on this server!', ephemeral=True)
+            if data:
+                await db.execute('UPDATE ids SET id = ? WHERE guild = ?', (channel.id, interaction.guild.id))
+            else:
+                await db.execute('INSERT INTO ids (id, guild) VALUES (?, ?)', (channel.id, interaction.guild.id))
+            await interaction.response.send_message(f'Congrats! Your channel set for cheese announcements is now {channel.mention}')
         await db.commit()
-    await interaction.response.send_message(f'Congrats! Your channel set for cheese announcements is now {channel.mention}')
 
-
-@bot.tree.command(name='unsubscribe', description='unsub from announcements! (admins only)')
-@app_commands.checks.has_permissions(administrator=True)
-async def unsub(interaction: discord.Interaction):
-    async with aiosqlite.connect('main.db') as db:
-        cursor = await db.execute('SELECT id FROM ids WHERE guild = ?', (interaction.guild.id,))
-        data = await cursor.fetchone()
-        if data:
-            await cursor.execute('DELETE FROM ids WHERE guild = ?', (int(interaction.guild.id),))
-            await interaction.response.send_message('Got it! You will no longer recieve cheese announcements!')
-        else:
-            await interaction.response.send_message('You\'re not subscribed to cheese announcements!', ephemeral=True)
-        await db.commit()
 
 @bot.event
 async def on_message(message):

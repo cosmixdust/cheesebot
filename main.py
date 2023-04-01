@@ -1,6 +1,5 @@
 import asyncio
 import random
-import string
 import typing
 from datetime import datetime
 import re
@@ -221,47 +220,75 @@ async def manage_announcements(interaction: discord.Interaction, channel: typing
         await db.commit()
 
 
+# no_cheese = r"""[\s!"£$%^&*()\[\]{}'@#~;:,<.>\/?\-\\\|`¬]"""
+no_cheese = r"""[\s!"'\-,.?]*"""
+cheese_regex = re.compile(
+    "({0})".format("|".join([
+        "(?:" + "".join([p + no_cheese for p in re.escape(i)]) + ")"
+         for i in wordsList
+    ])),
+    re.IGNORECASE | re.DOTALL
+)
+
+
+def check_content_for_cheese(content: str) -> str | None:
+    """
+    Check a string for if it contains any cheese keywords. If it does, then the
+    message content with the flagged keywords in bold is returned, otherwise
+    None.
+
+    Parameters
+    ----------
+    content : str
+        The content that you want to check.
+
+    Returns
+    -------
+    str | None
+        The flagged content, or ``None``.
+    """
+
+    changed = cheese_regex.sub("**\\1**", content)
+    if changed == content:
+        return None
+    return changed
+
 
 @bot.event
-async def on_message(message):
-    # trigger message stuff
-    trigger_words = []
-    trigger = message.content.translate(str.maketrans(
-        '', '', string.punctuation)).replace('\n', '').replace(' ', '').lower()
-    if not any(word in trigger for word in wordsList):
+async def on_message(message: discord.Message):
+    """
+    Look for a message being sent, see if it contains cheese.
+    """
+
+    if message.author.bot:
         return
-    try:
-        for word in wordsList:
-            if word in trigger:
-                trigger_words.append(word)
-        if not trigger_words:
-            return
-        if message.author.bot:
-            return
-        async with aiosqlite.connect('main.db') as db:
-            async with db.execute('SELECT user_id FROM blacklist') as cursor:
-                async for row in cursor:
-                    if row[0] == message.author.id:
-                        await message.add_reaction('🧀')
-                        return
-        await message.add_reaction('🧀')
-        trigger_words_str = '**, **'.join(trigger_words)
-        embed = discord.Embed(
-            title='Triggered Words Detected',
-            description=f"You said: **{trigger_words_str}**",
-            color=discord.Color.random(),
-            timestamp=datetime.now()
-        )
-        embed.set_author(
-            name=message.author.name,
-            icon_url=message.author.avatar,
-        )
-        embed.set_footer(text="Use /blacklist to not receive DMs anymore")
-        await message.author.send(embed=embed)
-    except Exception as e:
-        print(e)
+    cheese_content = check_content_for_cheese(message.content)
+    if cheese_content is None:
+        return
+    send_dm: bool = True
+    async with aiosqlite.connect("main.db") as db:
+        async with db.execute("SELECT user_id FROM blacklist") as cursor:
+            async for row in cursor:
+                if row[0] == message.author.id:
+                    send_dm = False
+    await message.add_reaction("🧀")
+    if not send_dm:
+        return False
+
+    embed = discord.Embed(
+        title="Cheese Detected!",
+        # description=f"You said: **{cheese_content}**",
+        description=cheese_content,
+        color=discord.Color.random(),
+        timestamp=datetime.now()
+    ).set_footer(
+        text="Use /blacklist to not receive DMs anymore",
+    )
+    await message.author.send(embeds=[embed])
 
 
-fileToken = open("token.txt", "r")
-token = fileToken.read()
+# fileToken = open("token.txt", "r")
+# token = fileToken.read()
+import sys
+token = sys.argv[-1]
 bot.run(token)

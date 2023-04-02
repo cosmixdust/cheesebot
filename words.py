@@ -61,6 +61,7 @@ wordsList = [
     "parmesan",
     "pendir",
     "penêr",
+    "pepper jack",
     "provolone",
     "quark",
     "queijo",

@@ -1,7 +1,6 @@
 import asyncio
 import random
 import typing
-from typing import Union
 from datetime import datetime
 import re
 
@@ -26,7 +25,7 @@ intents = discord.Intents(
 bot = commands.Bot(command_prefix="*", intents=intents)
 
 
-def make_help_embed(author: Union[discord.User, discord.Member]) -> discord.Embed:
+def make_help_embed(author: typing.Union[discord.User, discord.Member]) -> discord.Embed:
     return discord.Embed(
         title="About cheeseBot...",
         description="Here's everything you need to know!",
@@ -232,7 +231,7 @@ cheese_regex = re.compile(
 )
 
 
-def check_content_for_cheese(content: str) -> str | None:
+def check_content_for_cheese(content: str) -> typing.Optional[str]:
     """
     Check a string for if it contains any cheese keywords. If it does, then the
     message content with the flagged keywords in bold is returned, otherwise

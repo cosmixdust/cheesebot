@@ -1,6 +1,7 @@
 import asyncio
 import random
 import typing
+from typing import Union
 from datetime import datetime
 import re
 
@@ -25,7 +26,7 @@ intents = discord.Intents(
 bot = commands.Bot(command_prefix="*", intents=intents)
 
 
-def make_help_embed(author: discord.User | discord.Member) -> discord.Embed:
+def make_help_embed(author: Union[discord.User, discord.Member]) -> discord.Embed:
     return discord.Embed(
         title="About cheeseBot...",
         description="Here's everything you need to know!",

@@ -287,8 +287,6 @@ async def on_message(message: discord.Message):
     await message.author.send(embeds=[embed])
 
 
-# fileToken = open("token.txt", "r")
-# token = fileToken.read()
-import sys
-token = sys.argv[-1]
+fileToken = open("token.txt", "r")
+token = fileToken.read()
 bot.run(token)

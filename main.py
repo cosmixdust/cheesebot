@@ -13,6 +13,7 @@ from discord.ext import commands, tasks
 from facts import cheeseFacts
 from pics import cheesePhoto
 from words import wordsList
+from truth import cheeseTruth
 
 
 intents = discord.Intents(
@@ -135,6 +136,14 @@ async def cheesePics(interaction: discord.Interaction):
     """
 
     await interaction.response.send_message(random.choice(cheesePhoto))
+
+@bot.tree.command(name="truth")
+async def cheeseOfTruth(interaction: discord.Interaction):
+    """
+    the cheese of truth
+    """
+    
+    await interaction.response.send_message(random.choice(cheeseTruth))
 
 
 @bot.tree.command(name="blacklist")

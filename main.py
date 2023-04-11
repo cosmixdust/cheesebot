@@ -26,7 +26,7 @@ intents = discord.Intents(
 
 bot = commands.Bot(command_prefix="*", intents=intents)
 
-def make_intro_embed(author: typing.Union[discord.User, discord.Member]) -> discord.Embed:
+def make_intro_embed() -> discord.Embed:
     return discord.Embed(
         title="cheeseBot has joined!",
         description="What now?",
@@ -41,10 +41,8 @@ def make_intro_embed(author: typing.Union[discord.User, discord.Member]) -> disc
     ).add_field(
         name="Sounds good!",
         value="We hope you enjoy cheeseBot! Stay cheesy :)"
-    ).set_author(
-        name=author.name,
-        icon_url=author.avatar,
     )
+
 
 def make_help_embed(author: typing.Union[discord.User, discord.Member]) -> discord.Embed:
     return discord.Embed(

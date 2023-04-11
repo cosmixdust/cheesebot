@@ -55,7 +55,7 @@ def make_help_embed(author: typing.Union[discord.User, discord.Member]) -> disco
         value="I'm cheeseBot. A bot made by <@396376536070094848> related to cheese stuff.",
     ).add_field(
         name="Commands?",
-        value="/cheese, /fact, /pic, /blacklist, /announcements",
+        value="/cheese, /fact, /pic, /blacklist, /announcements, /truth",
     ).add_field(
         name="What's your privacy policy?",
         value="You can check our privacy policy [here](https://github.com/deltastro/cheesebot/blob/master/policy.md)"

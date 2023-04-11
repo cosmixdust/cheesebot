@@ -9,6 +9,7 @@ import pytz
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
+from discord.utils import find
 
 from facts import cheeseFacts
 from pics import cheesePhoto
@@ -25,6 +26,25 @@ intents = discord.Intents(
 
 bot = commands.Bot(command_prefix="*", intents=intents)
 
+def make_intro_embed(author: typing.Union[discord.User, discord.Member]) -> discord.Embed:
+    return discord.Embed(
+        title="cheeseBot has joined!",
+        description="What now?",
+        color=discord.Color.random(),
+        timestamp=datetime.now()
+    ).add_field(
+        name="Well...",
+        value="You can start with the /help command!",
+    ).add_field(
+        name="And then?",
+        value="Start trying out the rest of commands!",
+    ).add_field(
+        name="Sounds good!",
+        value="We hope you enjoy cheeseBot! Stay cheesy :)"
+    ).set_author(
+        name=author.name,
+        icon_url=author.avatar,
+    )
 
 def make_help_embed(author: typing.Union[discord.User, discord.Member]) -> discord.Embed:
     return discord.Embed(
@@ -100,6 +120,14 @@ async def on_ready():
     # Sync commands and print the number of commands synced
     synced = await bot.tree.sync()
     print(f"Synced {len(synced)} command(s)")
+
+async def on_guild_join(guild):
+    """
+    Message that bot sends when it joins a server.
+    """
+    general = find(lambda x: x.name == 'general', guild.text_channels)
+    if general and general.permissions_for(guild.me).send_messages:
+        return general.send(embed=make_intro_embed())
 
 
 @bot.tree.command(name="help")

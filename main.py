@@ -121,6 +121,7 @@ async def on_ready():
     synced = await bot.tree.sync()
     print(f"Synced {len(synced)} command(s)")
 
+@bot.event
 async def on_guild_join(guild):
     """
     Message that bot sends when it joins a server.

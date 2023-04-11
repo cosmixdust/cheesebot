@@ -41,6 +41,8 @@ def make_intro_embed() -> discord.Embed:
     ).add_field(
         name="Sounds good!",
         value="We hope you enjoy cheeseBot! Stay cheesy :)"
+    ).add_footer(
+        text="Be advised this bot automatically sends DMs when detected. Use /blacklist to not receieve DMs."
     )
 
 

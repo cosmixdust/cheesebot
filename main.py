@@ -125,8 +125,8 @@ async def on_guild_join(guild):
     Message that bot sends when it joins a server.
     """
     general = find(lambda x: x.name == 'general', guild.text_channels)
-    if general and general.permissions_for(guild.me).send_message:
-        return general.send(embed=make_intro_embed())
+    if general and general.permissions_for(guild.me).send_messages:
+        await general.send(embed=make_intro_embed())
 
 
 @bot.tree.command(name="help")

@@ -6,8 +6,7 @@
 
 # Privacy Policy
 
-Here's our [privacy policy](cosmixdust/cheesebot/blob/master/policy.md)
-
+You can check our Privacy Policy on the **policy.md** file
 # Concerns
 
 If you have any concerns about the usage of your data, please contact us.

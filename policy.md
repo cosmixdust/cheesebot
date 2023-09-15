@@ -16,6 +16,13 @@ We collect the following:
 
     Required for the functionality of the announcements and announcements command.
 
+* Messages
+
+    Messages are not stored, but they are used for the main functionality of cheeseBot.
+    A message gets checked, if it has a keyword that's in the list of possible cheese words,
+    it will react and send a DM, then it will move on to check the next message sent.
+    Users can opt-out of this feature by using the blacklist command.
+
 # Where data is stored and secured
 
 Data that we collect is stored in a database. This database is not accessible by other entities.

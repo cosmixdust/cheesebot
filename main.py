@@ -309,9 +309,9 @@ async def on_message(message: discord.Message):
             async for row in cursor:
                 if row[0] == message.author.id:
                     send_dm = False
-    await message.add_reaction("🧀")
     if not send_dm:
         return False
+    await message.add_reaction("🧀")
 
     embed = discord.Embed(
         title="Cheese Detected!",

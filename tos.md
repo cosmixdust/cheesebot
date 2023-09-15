@@ -7,6 +7,7 @@
 # Privacy Policy
 
 You can check our Privacy Policy on the policy.md file
+
 # Concerns
 
 If you have any concerns about the usage of your data, please contact us.

@@ -1,7 +1,7 @@
 cheeseTruth = [
     """Immigrants cause cancer.
-    (I need to inform that inmigrants in fact, do not cause cancer, and this is just a reference to the vine.)
-    https://youtube.com/shorts/S9AgVFNOibs?si=X2XV8E3dch6B2Cqj""",
+(I need to inform that inmigrants in fact, do not cause cancer, and this is just a reference to the vine.)
+https://youtube.com/shorts/S9AgVFNOibs?si=X2XV8E3dch6B2Cqj""",
     "Your bestie is gay.",
     "Sperm whales can't cum.",
     "VoxelFoxKae was indeed here.",
@@ -18,5 +18,6 @@ cheeseTruth = [
     "You should try StalkerBot.",
     "Your bestie has $30000 dollars in credit card debt.",
     "You're valid.",
-    "Unity sucks."
+    "Unity sucks.",
+    "You should totally buy a coffee"
 ]

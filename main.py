@@ -174,6 +174,15 @@ async def cheeseOfTruth(interaction: discord.Interaction):
     
     await interaction.response.send_message(random.choice(cheeseTruth))
 
+@bot.tree.command(name="donation")
+async def donations(interaction: discord.Interaction):
+    """
+    if ya have spare money, ofc
+    """
+
+    await interaction.response.send_message("""Buy my creator a coffee here: https://ko-fi.com/cosmixdust.
+This will help em, thanks for ur attention :)""")
+
 
 @bot.tree.command(name="blacklist")
 async def blackList(interaction: discord.Interaction):
